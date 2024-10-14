@@ -802,15 +802,12 @@ var _0x478ba1=_0x26a9;(function(_0x516b9a,_0x406655){var _0x58d48f=_0x26a9,_0x4e
     }
 
   </script>
-		
-    <script>
-      // Function to capture and download the chart area
+		<script>// Function to capture and download the chart area
       function captureChart() {
           // Get the SVG element
           const svg = document.getElementById('scatter-plot');
           const tooltip = d3.select("#tooltip");
-  
-          
+      
           // Create a canvas element
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
@@ -820,13 +817,20 @@ var _0x478ba1=_0x26a9;(function(_0x516b9a,_0x406655){var _0x58d48f=_0x26a9,_0x4e
           canvas.width = svgRect.width;
           canvas.height = svgRect.height;
           
+          // Fill canvas with a white background
+          ctx.fillStyle = '#FFFFFF';  // Set background to white
+          ctx.fillRect(0, 0, canvas.width, canvas.height);  // Fill the entire canvas
+          
           // Create an image from the SVG
           const img = new Image();
           const svgData = new XMLSerializer().serializeToString(svg);
-          img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
           
+          // Properly encode the SVG data
+          const encodedData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+          img.src = encodedData;
+      
           img.onload = function() {
-              // Draw the image on the canvas
+              // Draw the image on the canvas (on top of the white background)
               ctx.drawImage(img, 0, 0);
               
               // Convert canvas to image and trigger download
@@ -837,6 +841,7 @@ var _0x478ba1=_0x26a9;(function(_0x516b9a,_0x406655){var _0x58d48f=_0x26a9,_0x4e
               link.click();
           };
       }
+      
   
       // Add click event listener to the screenshot icon
       document.querySelector('.icon-screenshot').addEventListener('click', captureChart);
